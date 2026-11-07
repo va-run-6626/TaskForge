@@ -1,5 +1,4 @@
-package com.Varun.TaskForge;
-
+package com.varun.taskforge;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

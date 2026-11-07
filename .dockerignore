@@ -1,0 +1,17 @@
+.git
+.gitignore
+.devcontainer
+.github
+target/
+build/
+.mvn/
+mvnw
+mvnw.cmd
+pom.xml.releaseBackup
+release.properties
+README.md
+Dockerfile
+compose.yaml
+.vscode
+.idea
+*.iml

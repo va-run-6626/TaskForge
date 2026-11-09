@@ -12,13 +12,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder 
+@Builder
 public class TaskSimulationRequestDTO {
-    @NotBlank(message = "taskname cannot be blank")
-    public String taskName;
+    @NotBlank(message = "taskName cannot be blank")
+    private String taskName;
 
+    // Boxed Long so that a missing or explicit null value can be rejected by @NotNull.
     @NotNull(message = "durationMs is required")
-    @Max(value = 10000, message = "durationMs must be between 100 and 10000")
     @Min(value = 100, message = "durationMs must be between 100 and 10000")
-    public long durationMs;
+    @Max(value = 10000, message = "durationMs must be between 100 and 10000")
+    private Long durationMs;
 }

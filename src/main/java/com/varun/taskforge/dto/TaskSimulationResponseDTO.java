@@ -14,7 +14,7 @@ public class TaskSimulationResponseDTO {
     private String taskName;
     private Status status;
     private String threadName;
-    private long exectutionTimeInMs;
+    private long executionTimeMs;
 
     public enum Status {
         PENDING, RUNNING, COMPLETED, FAILED

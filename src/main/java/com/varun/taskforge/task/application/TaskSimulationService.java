@@ -1,18 +1,17 @@
-package com.varun.taskforge.service;
+package com.varun.taskforge.task.application;
 
 import org.springframework.stereotype.Service;
 
-import com.varun.taskforge.dto.TaskSimulationRequestDTO;
-import com.varun.taskforge.dto.TaskSimulationResponseDTO;
-import com.varun.taskforge.exception.TaskInterruptedException;
+import com.varun.taskforge.task.api.dto.TaskSimulationRequestDTO;
+import com.varun.taskforge.task.api.dto.TaskSimulationResponseDTO;
+import com.varun.taskforge.task.exception.TaskInterruptedException;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class TaskServiceImpl implements ITaskService {
+public class TaskSimulationService {
 
-    @Override
     public TaskSimulationResponseDTO simulate(TaskSimulationRequestDTO request) {
         String threadName = Thread.currentThread().getName();
         log.info("Starting task '{}' on thread [{}] for {} ms", request.getTaskName(), threadName,

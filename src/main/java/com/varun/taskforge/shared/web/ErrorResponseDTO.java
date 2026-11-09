@@ -1,4 +1,4 @@
-package com.varun.taskforge.dto;
+package com.varun.taskforge.shared.web;
 
 import java.time.Instant;
 

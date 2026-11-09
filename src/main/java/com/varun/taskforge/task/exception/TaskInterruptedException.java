@@ -1,8 +1,8 @@
-package com.varun.taskforge.exception;
+package com.varun.taskforge.task.exception;
 
 /**
  * Thrown when a simulated task is interrupted before it finishes.
- * Translated to HTTP 503 Service Unavailable by {@link GlobalExceptionHandler}.
+ * Translated to HTTP 503 Service Unavailable by the shared web exception handler.
  */
 public class TaskInterruptedException extends RuntimeException {
 

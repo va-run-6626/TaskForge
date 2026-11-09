@@ -1,4 +1,4 @@
-package com.varun.taskforge.exception;
+package com.varun.taskforge.shared.web;
 
 import java.time.Instant;
 import java.util.stream.Collectors;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.varun.taskforge.dto.ErrorResponseDTO;
+import com.varun.taskforge.task.exception.TaskInterruptedException;
 
 import lombok.extern.slf4j.Slf4j;
 

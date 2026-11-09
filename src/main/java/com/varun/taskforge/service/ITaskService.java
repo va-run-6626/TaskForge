@@ -1,10 +1,11 @@
 package com.varun.taskforge.service;
 
-import com.varun.taskforge.dto.TaskSimulationReponseDTO;
+import com.varun.taskforge.dto.TaskSimulationRequestDTO;
+import com.varun.taskforge.dto.TaskSimulationResponseDTO;
 
 /**
  * ITaskService
  */
 public interface ITaskService {
-    public TaskSimulationReponseDTO stimulate(String taskname, int durationMs);
+    public TaskSimulationResponseDTO simulate(TaskSimulationRequestDTO request);
 }

@@ -1,0 +1,38 @@
+package com.varun.taskforge.service;
+
+import org.springframework.stereotype.Service;
+
+import com.varun.taskforge.dto.TaskSimulationRequestDTO;
+import com.varun.taskforge.dto.TaskSimulationResponseDTO;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j 
+@Service 
+public class TaskServiceImpl implements ITaskService{
+
+    @Override
+    public TaskSimulationResponseDTO simulate(TaskSimulationRequestDTO request) {
+        String threadName = Thread.currentThread().getName();
+        log.info("Starting task '{}' on thread [{}] for {} ms", request.getTaskName(), threadName,
+                request.getDurationMs());
+        long startTime = System.nanoTime();
+        try{
+            Thread.sleep(request.getDurationMs());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.error("Task '{}' on thread [{}] was interrupted!", request.getTaskName(), threadName);
+        }
+        long endTime = System.nanoTime();
+        long elapsedMs = (endTime - startTime) / 1_000_000;
+        log.info("Completed task '{}' on thread [{}] in {} ms", request.getTaskName(), threadName, elapsedMs);
+
+        return TaskSimulationResponseDTO.builder()
+                .taskName(request.getTaskName())
+                .status(TaskSimulationResponseDTO.Status.COMPLETED)
+                .threadName(threadName)
+                .exectutionTimeInMs(elapsedMs)
+                .build();
+    }
+    
+}

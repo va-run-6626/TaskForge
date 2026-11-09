@@ -10,10 +10,10 @@ This is a Project build to learn Java Concurrency and Multithreading.
 ```bash
 ./mvnw spring-boot:run          # local
 docker compose up --build       # Docker
-./mvnw test                     # tests
+./mvnw clean verify             # build and run the test suite
 ```
 
-The base path is `http://localhost:8080/api/v1`.
+The base path is `http://localhost:8080/api/v1`. Health check: `curl -i http://localhost:8080/api/v1/actuator/health`.
 
 ## Endpoints
 
@@ -47,7 +47,7 @@ Error responses all use the same shape:
 | ---- | ------------------- | ---------------------------------------------- |
 | 400  | `VALIDATION_ERROR`  | A field is missing or out of range             |
 | 400  | `MALFORMED_REQUEST` | The body is missing or is not valid JSON       |
-| 503  | `TASK_INTERRUPTED`  | The worker thread was interrupted mid-task     |
+| 503  | `TASK_INTERRUPTED`  | The request-handling thread was interrupted mid-task |
 
 Example:
 ```bash
@@ -58,35 +58,35 @@ curl -s -H 'Content-Type: application/json' \
 
 ## Execution model (Job 01)
 
-The endpoint is **synchronous**. Embedded Tomcat assigns each incoming HTTP request to a thread from its worker pool (`http-nio-<port>-exec-N`, 200 threads by default). The task runs on that thread, which stays blocked for the whole `durationMs` before the response is written.
+The endpoint is **synchronous**. Embedded Tomcat assigns each incoming HTTP request to a **Tomcat request-handling thread** from its connector thread pool (`http-nio-<port>-exec-N`, 200 threads by default). The task runs directly on that thread; there are no dedicated task worker threads yet. The request-handling thread stays blocked for the whole `durationMs` before the response is written.
 
 If the thread is interrupted during the sleep, the service restores the interrupt flag, stops the normal path, and throws `TaskInterruptedException`. `GlobalExceptionHandler` turns this into `503 Service Unavailable`. An interrupted task is never reported as `COMPLETED`.
 
 ## Concurrency experiment
 
-Three requests, each with `durationMs = 2000`, measured on 2026-11-09.
+Three requests, each with `durationMs = 2000`, measured on 2026-11-09 against the Docker container (`docker compose up --build -d`) on the default port 8080.
 
 **Sequential** (each `curl` waits for the previous one to finish):
 
 | Task  | Thread                 | executionTimeMs |
 | ----- | ---------------------- | --------------- |
-| seq-1 | `http-nio-8081-exec-2` | 2000            |
-| seq-2 | `http-nio-8081-exec-4` | 2000            |
-| seq-3 | `http-nio-8081-exec-6` | 2000            |
+| seq-1 | `http-nio-8080-exec-4` | 2000            |
+| seq-2 | `http-nio-8080-exec-6` | 2000            |
+| seq-3 | `http-nio-8080-exec-8` | 2000            |
 
-Wall-clock time: **6164 ms**
+Wall-clock time: **6481 ms**
 
 **Concurrent** (three `curl` processes started together in the background):
 
 | Task  | Thread                 | executionTimeMs |
 | ----- | ---------------------- | --------------- |
-| con-1 | `http-nio-8081-exec-7` | 2000            |
-| con-2 | `http-nio-8081-exec-9` | 2000            |
-| con-3 | `http-nio-8081-exec-8` | 2000            |
+| con-1 | `http-nio-8080-exec-10` | 2000           |
+| con-2 | `http-nio-8080-exec-2`  | 2000           |
+| con-3 | `http-nio-8080-exec-1`  | 2001           |
 
-Wall-clock time: **2029 ms**
+Wall-clock time: **2050 ms**
 
-**What this shows:** each task still takes 2 s, but Tomcat ran the concurrent requests on three different worker threads at the same time, so the batch finished in about 2 s instead of 6 s. The concurrency comes entirely from the servlet container's thread pool, not from the application code. Each request still blocks a thread, so throughput is limited by the pool size. Once all worker threads are busy, new requests queue up.
+**What this shows:** each task still takes 2 s, but Tomcat ran the concurrent requests on three different request-handling threads at the same time, so the batch finished in about 2 s instead of 6 s. The concurrency comes entirely from the servlet container's thread pool, not from the application code. Each request still blocks a thread, so throughput is limited by the pool size. Once all request-handling threads are busy, new requests queue up.
 
 Reproduce:
 ```bash

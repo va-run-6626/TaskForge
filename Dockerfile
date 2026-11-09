@@ -11,7 +11,7 @@ RUN mvn dependency:go-offline -B
 # Copy the source code
 COPY src ./src
 
-# Build the application package, skipping tests for speed
+# Build the application package (runs the test suite)
 RUN mvn clean package
 
 # --- Stage 2: Create the runtime image ---

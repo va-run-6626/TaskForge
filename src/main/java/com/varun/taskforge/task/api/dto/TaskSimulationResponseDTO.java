@@ -1,4 +1,4 @@
-package com.varun.taskforge.dto;
+package com.varun.taskforge.task.api.dto;
 
 
 import lombok.AllArgsConstructor;

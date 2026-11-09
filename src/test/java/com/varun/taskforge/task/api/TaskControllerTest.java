@@ -1,4 +1,4 @@
-package com.varun.taskforge.controller;
+package com.varun.taskforge.task.api;
 
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -14,7 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 /**
- * End-to-end test against the real TaskServiceImpl, using a short duration.
+ * End-to-end test against the real TaskSimulationService, using a short duration.
  * MockMvc paths are relative to the servlet context, so /api/v1 is omitted.
  */
 @SpringBootTest

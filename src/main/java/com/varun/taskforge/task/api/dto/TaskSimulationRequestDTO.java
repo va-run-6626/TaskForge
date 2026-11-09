@@ -1,4 +1,4 @@
-package com.varun.taskforge.dto;
+package com.varun.taskforge.task.api.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

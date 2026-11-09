@@ -1,22 +1,25 @@
-package com.varun.taskforge.service;
+package com.varun.taskforge.system.application;
 
 import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.varun.taskforge.dto.SystemResponseDTO;
+import com.varun.taskforge.system.api.dto.SystemResponseDTO;
 
-@Service 
-public class SystemServiceImpl implements ISystemService {
-    
-    @Value("${spring.application.name}")
-    private String applicationName;
+@Service
+public class SystemService {
 
-    @Value("${app.java.version}")
-    private String javaVersion;
+    private final String applicationName;
+    private final String javaVersion;
 
-    @Override
+    public SystemService(
+            @Value("${spring.application.name}") String applicationName,
+            @Value("${app.java.version}") String javaVersion) {
+        this.applicationName = applicationName;
+        this.javaVersion = javaVersion;
+    }
+
     public SystemResponseDTO getSystemInformation() {
         return SystemResponseDTO.builder()
                 .applicationName(applicationName)
@@ -26,5 +29,4 @@ public class SystemServiceImpl implements ISystemService {
                 .timeStamp(Instant.now())
                 .build();
     }
-    
 }

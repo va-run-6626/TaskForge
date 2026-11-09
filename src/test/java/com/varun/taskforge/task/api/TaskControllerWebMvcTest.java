@@ -1,4 +1,4 @@
-package com.varun.taskforge.controller;
+package com.varun.taskforge.task.api;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
@@ -19,15 +19,15 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.varun.taskforge.dto.TaskSimulationRequestDTO;
-import com.varun.taskforge.dto.TaskSimulationResponseDTO;
-import com.varun.taskforge.exception.TaskInterruptedException;
-import com.varun.taskforge.service.ITaskService;
+import com.varun.taskforge.task.api.dto.TaskSimulationRequestDTO;
+import com.varun.taskforge.task.api.dto.TaskSimulationResponseDTO;
+import com.varun.taskforge.task.application.TaskSimulationService;
+import com.varun.taskforge.task.exception.TaskInterruptedException;
 
 /**
  * HTTP-layer tests: validation, error translation and status codes.
  * The service is mocked, so no test here sleeps; real execution timing is
- * covered by {@link TaskControllerTest} and TaskServiceImplTest.
+ * covered by {@link TaskControllerTest} and TaskSimulationServiceTest.
  */
 @WebMvcTest(TaskController.class)
 class TaskControllerWebMvcTest {
@@ -36,7 +36,7 @@ class TaskControllerWebMvcTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private ITaskService taskService;
+    private TaskSimulationService taskService;
 
     private ResultActions postJson(String body) throws Exception {
         return mockMvc.perform(post("/tasks/simulate")

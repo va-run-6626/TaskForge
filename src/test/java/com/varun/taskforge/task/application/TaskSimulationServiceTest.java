@@ -1,4 +1,4 @@
-package com.varun.taskforge.service;
+package com.varun.taskforge.task.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -11,13 +11,13 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import com.varun.taskforge.dto.TaskSimulationRequestDTO;
-import com.varun.taskforge.dto.TaskSimulationResponseDTO;
-import com.varun.taskforge.exception.TaskInterruptedException;
+import com.varun.taskforge.task.api.dto.TaskSimulationRequestDTO;
+import com.varun.taskforge.task.api.dto.TaskSimulationResponseDTO;
+import com.varun.taskforge.task.exception.TaskInterruptedException;
 
-class TaskServiceImplTest {
+class TaskSimulationServiceTest {
 
-    private final TaskServiceImpl service = new TaskServiceImpl();
+    private final TaskSimulationService service = new TaskSimulationService();
 
     @AfterEach
     void clearInterruptFlag() {
